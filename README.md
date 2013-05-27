@@ -1,3 +1,1 @@
-This is a skeleton sub-project for pulse (pulse.torweg.org).
-This can be gerenated from scratch by following these instructions: 
-http://pulse.torweg.org/site/Pulsar/en_US.CMS.displayCMS.369./set-up-a-sub-project
+This is a work in progress to add forums to pulse. pulse.torweg.org
