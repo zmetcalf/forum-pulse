@@ -17,15 +17,34 @@
  */
 package org.torweg.pulse.component.forum.model;
 
+import javax.persistence.Entity;
+import javax.xml.bind.annotation.XmlAccessOrder;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorOrder;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.torweg.pulse.bundle.ExtendedJDOMable;
+import org.torweg.pulse.component.blog.model.BlogContent;
 import org.torweg.pulse.site.content.AbstractBasicContent;
 
 /**
  * @author Thomas Weber, Daniel Dietz, Zach Metcalf
  * @version $Revision$
  */
-
+@Entity
+@XmlRootElement(name = "forum-content")
+@XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CMSContent extends AbstractBasicContent implements
 		ExtendedJDOMable {
+	
+	/**
+	 * the logger for {@code ForumContent}.
+	 */
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(BlogContent.class);
 	
 }
