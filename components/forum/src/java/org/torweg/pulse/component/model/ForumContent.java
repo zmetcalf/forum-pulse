@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.torweg.pulse.bundle.ExtendedJDOMable;
-import org.torweg.pulse.component.blog.model.BlogContent;
 import org.torweg.pulse.site.content.AbstractBasicContent;
 
 /**
@@ -38,13 +37,13 @@ import org.torweg.pulse.site.content.AbstractBasicContent;
 @XmlRootElement(name = "forum-content")
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CMSContent extends AbstractBasicContent implements
+public class ForumContent extends AbstractBasicContent implements
 		ExtendedJDOMable {
 	
 	/**
 	 * the logger for {@code ForumContent}.
 	 */
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(BlogContent.class);
+			.getLogger(ForumContent.class);
 	
 }

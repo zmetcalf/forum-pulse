@@ -31,11 +31,11 @@ import org.torweg.pulse.site.map.SitemapNode;
  */
 public class ForumContentDisplayerResult extends ContentResult {
 	
-	public StoreContentDisplayerResult(final Content c, final ServiceRequest r) {
+	public ForumContentDisplayerResult(final Content c, final ServiceRequest r) {
 		super(c, r);
 	}
 	
-	public StoreContentDisplayerResult(final ContentGroup co,
+	public ForumContentDisplayerResult(final ContentGroup co,
 			final List<SitemapNode> ch, final ServiceRequest r) {
 		super(co, ch, r);
 	}
