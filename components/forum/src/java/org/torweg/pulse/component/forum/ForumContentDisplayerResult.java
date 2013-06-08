@@ -31,15 +31,38 @@ import org.torweg.pulse.site.map.SitemapNode;
  */
 public class ForumContentDisplayerResult extends ContentResult {
 	
+	/**
+	 * 
+	 * @param c
+	 *            the {@code ForumContent} to be displayed.
+	 * @param r
+	 *            the current request
+	 */
 	public ForumContentDisplayerResult(final Content c, final ServiceRequest r) {
 		super(c, r);
 	}
 	
+	/**
+	 * 
+	 * @param co
+	 *            the {@code ContentGroup} to be displayed.
+	 * @param ch
+	 *            the children of the {@code ContentGroup}
+	 * @param r
+	 *            the current request
+	 */
 	public ForumContentDisplayerResult(final ContentGroup co,
 			final List<SitemapNode> ch, final ServiceRequest r) {
 		super(co, ch, r);
 	}
 	
+	/**
+	 * returns an extended JDOM representation of the {@code Result}.
+	 * 
+	 * @param r
+	 *            the current request
+	 * @return an extended JDOM representation of the {@code Result}
+	 */
 	@Override
 	public Element deserializeToJDOM(final ServiceRequest r) {
 		Element jdom = super.deserializeToJDOM(r);

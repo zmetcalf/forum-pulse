@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <bundle>
 	<!-- controllers exposed by this Bundle -->
-	<controllers/>
+	<controllers>
+		<controller class="org.torweg.pulse.component.forum.ForumContentDisplayer"/>
+	</controllers>
 
 	<!-- the implementations of org.torweg.pulse.site.content.Content exposed by this Bundle -->
 	<content-mappings/>
