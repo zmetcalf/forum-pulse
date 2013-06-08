@@ -17,6 +17,9 @@
  */
 package org.torweg.pulse.component.forum.model;
 
+import java.util.HashSet;
+import java.util.Locale;
+
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -24,10 +27,19 @@ import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.torweg.pulse.accesscontrol.User;
+import org.torweg.pulse.bundle.Bundle;
 import org.torweg.pulse.bundle.ExtendedJDOMable;
+import org.torweg.pulse.component.store.model.StoreContent;
+import org.torweg.pulse.component.store.model.StoreVariant;
 import org.torweg.pulse.site.content.AbstractBasicContent;
+import org.torweg.pulse.site.content.Content;
+import org.torweg.pulse.site.content.Variant;
+import org.torweg.pulse.vfs.VirtualFile;
+import org.torweg.pulse.vfs.VirtualFileSystem;
 
 /**
  * @author Thomas Weber, Daniel Dietz, Zach Metcalf
@@ -46,4 +58,96 @@ public class ForumContent extends AbstractBasicContent implements
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ForumContent.class);
 	
+	/**
+	 * The constructor that sets the {@code Locale} and the {@code Bundle} of
+	 * the {@code StoreContent}.
+	 * 
+	 * @param pLocale
+	 *            the {@code Locale} to be set.
+	 * @param pBundle
+	 *            the {@code Bundle} to be set.
+	 */
+	public ForumContent(final Locale pLocale, final Bundle pBundle) {
+		super();
+		setLocale(pLocale);
+		setBundle(pBundle);
+	}
+	
+	/**
+	 * Creates a non-persistent (therefore id = null) copy of the current
+	 * {@code ForumContent} with the given {@code Locale}.
+	 * 
+	 * @param l
+	 *            the {@code Locale} to be used.
+	 * @param u
+	 *            the {@code User} to be used as the creator/last modifier of
+	 *            the copied {@code Content}
+	 * @return a copy of the {@code ForumContent}.
+	 */
+	@Override
+	public ForumContent createCopy(final Locale l, final User u) {
+		// Create copy of ForumContent
+		ForumContent copy = new ForumContent(l, getBundle());
+
+		addValuesToCopy(copy, u);
+
+		// Update virtual files
+		copy.updateAssociatedVirtualFiles();
+
+		// Return copy
+		return copy;
+	}
+	
+	/**
+	 * returns the {@code StoreContent}'s textual information as it is supposed
+	 * to be supplied for the index.
+	 * 
+	 * @return the {@code StoreContent}'s textual information
+	 * @see org.torweg.pulse.site.content.AbstractBasicContent#getFullTextValue()
+	 */
+	@Override
+	public StringBuilder getFullTextValue() {
+		StringBuilder builder = super.getFullTextValue();
+
+		return builder;
+	}
+	/**
+	 * returns {@code false}.
+	 * 
+	 * @see Content#isGroup()
+	 * @return {@code false}.
+	 */
+	@Override
+	public final boolean isGroup() {
+		return false;
+	}
+	
+	/**
+	 * updates the {@code CMSContent}s HTML, if associated {@code VirtualFile}s
+	 * have been moved in the {@code VirtualFileSystem}.
+	 * <p>
+	 * This method is executed by the {@code VirtualFileSystem}
+	 * </p>
+	 * 
+	 * @param file
+	 *            the moved files
+	 */
+	@Override
+	public void onVirtualFileSystemChange(final VirtualFile file) {
+		setSummary(Content.updateHTML(getSummaryElement(), file));
+	}
+	
+	/**
+	 * Is called by the editors upon save actions to update the list of
+	 * associated {@code VirtualFile}s.
+	 */
+	@Override
+	public void updateAssociatedVirtualFiles() {
+		HashSet<VirtualFile> files = new HashSet<VirtualFile>();
+		VirtualFileSystem fileSystem = VirtualFileSystem.getInstance();
+		Element element = getSummaryElement();
+		Content.processHTML(element, files, fileSystem);
+		setSummary(element);
+		setAssociatedVirtualFiles(files);
+	}
 }
