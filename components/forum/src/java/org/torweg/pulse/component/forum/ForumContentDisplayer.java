@@ -17,16 +17,27 @@
  */
 package org.torweg.pulse.component.forum;
 
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.torweg.pulse.annotations.Action;
 import org.torweg.pulse.annotations.Permission;
 import org.torweg.pulse.annotations.Action.Security;
-import org.torweg.pulse.component.cms.CMSContentDisplayerResult;
-import org.torweg.pulse.component.store.StoreContentDisplayer;
+import org.torweg.pulse.component.forum.ForumContentDisplayerResult;
+import org.torweg.pulse.component.forum.model.ForumContent;
+import org.torweg.pulse.invocation.lifecycle.Lifecycle;
+import org.torweg.pulse.service.PulseException;
+import org.torweg.pulse.service.event.NotFoundEvent;
 import org.torweg.pulse.service.request.Command;
 import org.torweg.pulse.service.request.ServiceRequest;
+import org.torweg.pulse.site.content.AbstractBasicContent;
 import org.torweg.pulse.site.content.AbstractContentDisplayer;
+import org.torweg.pulse.site.content.ContentGroup;
+import org.torweg.pulse.site.content.ContentResult;
+import org.torweg.pulse.site.map.SitemapNode;
 
 
 /**
@@ -61,7 +72,58 @@ public class ForumContentDisplayer extends AbstractContentDisplayer {
 	 */
 	@Action(value = "displayForum", security = Security.NEVER)
 	@Permission("displayForum")
-	public final ForumContentDisplayerResult display(final ServiceRequest request) {
-		return null;
+	public final ForumContentDisplayerResult displayForum(final ServiceRequest request) {
+		
+		Command command = request.getCommand();
+		
+		Session s = Lifecycle.getHibernateDataSource().createNewSession();
+		Transaction tx = s.beginTransaction();
+		
+		try {
+			AbstractBasicContent content = chooseContent(command, s);
+
+			// no content found?
+			if (content == null) {
+				LOGGER.warn("No content found for '{}'.", command);
+				request.getEventManager().addEvent(new NotFoundEvent());
+				return null;
+			}
+			/*
+			 * wrong suffix or contentId HTTP-parameter --> redirect with
+			 * correct suffix and/or contentId pulse parameter
+			 */
+			if ((!content.getSuffix().equals(command.getSuffix()))
+					|| (command.getHttpParameter("contentId") != null)) {
+				prepareRedirect(request, content);
+				tx.commit();
+				return null;
+			}
+
+			/* init lazy fields */
+			content.initializeLazyFields();
+
+			ForumContentDisplayerResult result;
+
+			if (content instanceof ForumContent) {
+				ForumContent fc = (ForumContent) content;
+				result = new ForumContentDisplayerResult(fc, request);
+			} else if (content instanceof ContentGroup) {
+				ContentGroup fcg = (ContentGroup) content;
+				List<SitemapNode> children = getChildrenForContentGroup(
+						request, s);
+				result = new ForumContentDisplayerResult(fcg, children, request);
+			} else {
+				tx.commit();
+				return null;
+			}
+
+			tx.commit();
+			return result;
+		} catch (Exception e) {
+			tx.rollback();
+			throw new PulseException(e);
+		} finally {
+			s.close();
+		}
 	}
 }
