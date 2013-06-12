@@ -33,9 +33,8 @@ import org.slf4j.LoggerFactory;
 import org.torweg.pulse.accesscontrol.User;
 import org.torweg.pulse.bundle.Bundle;
 import org.torweg.pulse.bundle.ExtendedJDOMable;
-import org.torweg.pulse.component.store.model.StoreContent;
-import org.torweg.pulse.component.store.model.StoreVariant;
 import org.torweg.pulse.site.content.AbstractBasicContent;
+import org.torweg.pulse.site.content.AbstractSummaryDescriptionContent;
 import org.torweg.pulse.site.content.Content;
 import org.torweg.pulse.site.content.Variant;
 import org.torweg.pulse.vfs.VirtualFile;
@@ -49,7 +48,7 @@ import org.torweg.pulse.vfs.VirtualFileSystem;
 @XmlRootElement(name = "forum-content")
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ForumContent extends AbstractBasicContent implements
+public class ForumContent extends AbstractSummaryDescriptionContent implements
 		ExtendedJDOMable {
 	
 	/**
@@ -59,7 +58,7 @@ public class ForumContent extends AbstractBasicContent implements
 			.getLogger(ForumContent.class);
 	
 	/**
-	 * Hibernate<sup>TM</sup>.
+	 * for JAXB and Hibernate.
 	 */
 	@Deprecated
 	public ForumContent() {
