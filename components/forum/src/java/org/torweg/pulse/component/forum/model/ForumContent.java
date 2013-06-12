@@ -59,6 +59,14 @@ public class ForumContent extends AbstractBasicContent implements
 			.getLogger(ForumContent.class);
 	
 	/**
+	 * Hibernate<sup>TM</sup>.
+	 */
+	@Deprecated
+	public ForumContent() {
+		super();
+	}
+	
+	/**
 	 * The constructor that sets the {@code Locale} and the {@code Bundle} of
 	 * the {@code StoreContent}.
 	 * 
