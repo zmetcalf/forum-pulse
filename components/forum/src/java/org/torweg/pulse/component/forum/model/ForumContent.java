@@ -19,8 +19,13 @@ package org.torweg.pulse.component.forum.model;
 
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorOrder;
@@ -30,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.torweg.pulse.accesscontrol.Role;
 import org.torweg.pulse.accesscontrol.User;
 import org.torweg.pulse.bundle.Bundle;
 import org.torweg.pulse.bundle.ExtendedJDOMable;
@@ -56,6 +62,38 @@ public class ForumContent extends AbstractSummaryDescriptionContent implements
 	 */
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ForumContent.class);
+	
+	/**
+	 * roles required for reading forums.
+	 */
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	@JoinTable(name = "ForumContent_readRoles")
+	private Set<Role> readRoles = new HashSet<Role>();
+
+	/**
+	 * roles required for posting threads.
+	 */
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	@JoinTable(name = "ForumContent_commentRoles")
+	private Set<Role> commentRoles = new HashSet<Role>();
+
+	/**
+	 * roles required for moderating forums.
+	 */
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	@JoinTable(name = "ForumContent_moderatorRoles")
+	private Set<Role> moderatorRoles = new HashSet<Role>();
+
+	/**
+	 * roles required for starting categories.
+	 */
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	@JoinTable(name = "ForumContent_ownerRoles")
+	private Set<Role> authorRoles = new HashSet<Role>();
 	
 	/**
 	 * for JAXB and Hibernate.
