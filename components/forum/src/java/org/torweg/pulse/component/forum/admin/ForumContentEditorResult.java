@@ -19,23 +19,43 @@ package org.torweg.pulse.component.forum.admin;
 
 import org.jdom.Element;
 import org.torweg.pulse.bundle.Result;
+import org.torweg.pulse.component.forum.model.ForumContent;
 
 /**
- * the result for the CMSPageEditor.
+ * the result for the {@code ForumContentEditor}.
  * 
  * @author Daniel Dietz, Zach Metcalf
  * @version $Revision$
  */
-public class ForumPageEditorResult implements Result {
+public class ForumContentEditorResult implements Result {
 
-	/** 
-	 * @see org.torweg.pulse.bundle.JDOMable#deserializeToJDOM()
+	/**
+	 * the {@code ForumContent} of the result.
+	 */
+	private ForumContent content;
+
+	/**
+	 * @return the result as {@code Element}.
 	 * 
-	 * @return a result TODO: What is it returning?
+	 * @see org.torweg.pulse.bundle.JDOMable#deserializeToJDOM()
 	 */
 	public Element deserializeToJDOM() {
 		Element result = new Element("result").setAttribute("class", this
 				.getClass().getCanonicalName());
+		if (this.content != null) {
+			result.addContent(this.content.deserializeToJDOM());
+		}
 		return result;
 	}
+
+	/**
+	 * sets the content of the result.
+	 * 
+	 * @param c
+	 *            the {@code ForumContent} to be set
+	 */
+	public void setContent(final ForumContent c) {
+		this.content = c;
+	}
+
 }
