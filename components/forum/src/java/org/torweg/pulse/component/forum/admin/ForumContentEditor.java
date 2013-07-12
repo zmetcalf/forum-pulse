@@ -17,9 +17,6 @@
  */
 package org.torweg.pulse.component.forum.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -32,7 +29,6 @@ import org.torweg.pulse.annotations.Action;
 import org.torweg.pulse.annotations.Permission;
 import org.torweg.pulse.annotations.RequireToken;
 import org.torweg.pulse.bundle.Bundle;
-import org.torweg.pulse.bundle.Result;
 import org.torweg.pulse.component.forum.model.ForumContent;
 import org.torweg.pulse.invocation.lifecycle.Lifecycle;
 import org.torweg.pulse.service.PulseException;
