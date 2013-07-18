@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- bundle: Forum -->
+<configuration bean="org.torweg.pulse.component.core.CommandGeneratorConfig">
+
+    <!-- FCKEditor -->
+    <command name="browseFCKEditor" action="browseFCKEditor" bundle="Core"/>
+
+    <!-- content registry (find, select) -->
+    <command name="getContentRegistryIdPathContent" action="getContentRegistryIdPathContent"
+        bundle="Core" sitemapID=""/>
+    <command name="browseContentRegistrySelect" action="browseContentRegistrySelect" bundle="Core"
+        sitemapID=""/>
+
+    <!-- from Core -> FileBrowser (for image-groups-editing) -->
+    <command name="browseVirtualFileSystem" action="browseVirtualFileSystem" bundle="Core"
+        sitemapID=""/>
+    <command name="previewVirtualFileSystem" action="previewVirtualFileSystem" bundle="Core"
+        sitemapID=""/>
+    <command name="previewVirtualFileSystemVFSPermissionEditor"
+        action="previewVirtualFileSystemVFSPermissionEditor" bundle="Core" sitemapID=""/>
+    <command name="getUploadProgress" action="getUploadProgress" bundle="Core" sitemapID=""/>
+
+    <!-- ContentPlugin-editor -->
+    <command name="getCreateContentPluginURLs" action="getCreateContentPluginURLs" bundle="Core"/>
+    <command name="loadContentPlugins" action="loadContentPlugins" bundle="Core"/>
+
+</configuration>

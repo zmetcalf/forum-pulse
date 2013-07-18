@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration bean="org.torweg.pulse.site.content.admin.ContentRegistryEditorConfig">
+    <ajaxCreate xsl="WEB-INF/components/core/xsl/ajax.Registry.create.xsl"/>
+
+    <!-- the edit-views of the content-registry -->
+    <edit-views>
+        <class name="org.torweg.pulse.site.content.ContentFolderNode">
+            <view type="create"/>
+            <view type="edit"/>
+            <view type="move"/>
+            <view type="delete"/>
+            <view type="expandEdit"/>
+        </class>
+
+        <class name="org.torweg.pulse.site.content.ContentNode">
+            <view type="move"/>
+            <view type="expandEdit"/>
+            <class name="org.torweg.pulse.component.forum.model.ForumContent">
+                <view type="edit"/>
+                <view type="delete"/>
+            </class>
+            <class name="org.torweg.pulse.site.content.ContentGroup">
+                <view type="edit"/>
+                <view type="delete"/>
+            </class>
+        </class>
+
+        <class name="org.torweg.pulse.site.content.RegistryLocaleNode">
+            <view type="expandEdit"/>
+            <view type="create"/>
+        </class>
+
+    </edit-views>
+
+</configuration>

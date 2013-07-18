@@ -2,13 +2,82 @@
 <bundle>
 	<!-- controllers exposed by this Bundle -->
 	<controllers>
+	    <controller class="org.torweg.pulse.component.core.CommandGenerator" alwaysRun="pre"/>
 		<controller class="org.torweg.pulse.component.forum.ForumContentDisplayer"/>
+		
+		<!-- admin -->
+        <controller class="org.torweg.pulse.site.content.admin.AbstractBasicContentEditor"/>
+        <controller class="org.torweg.pulse.component.forum.admin.ForumContentEditor"/>
+        <controller class="org.torweg.pulse.component.forum.admin.ForumContentRegistryEditor"/>	
 	</controllers>
 
 	<!-- the implementations of org.torweg.pulse.site.content.Content exposed by this Bundle -->
-	<content-mappings/>
+	<content-mappings>
+	   	<mapping class="org.torweg.pulse.component.forum.model.ForumContent">
+            <view type="default" name="ForumDisplay" class="org.torweg.pulse.site.View">
+                <command action="displayForum"/>
+            </view>
+            <view type="save" name="ForumSaveContent" class="org.torweg.pulse.site.View">
+                <command action="saveForumContent"/>
+            </view>
+            <view type="create" name="ForumCreateContent" class="org.torweg.pulse.site.View">
+                <command action="createForumContent"/>
+            </view>
+            <view type="edit" name="ForumContentEditor" class="org.torweg.pulse.site.View">
+                <command action="initEditor"/>
+            </view>
+            <view type="delete" name="ForumContentDelete" class="org.torweg.pulse.site.View">
+                <command action="deleteAbstractContentNode" bundle="Core"/>
+            </view>
+            <!-- <view class=""><command/></view> -->
+        </mapping>
+        
+        <mapping class="org.torweg.pulse.site.content.ContentFolderNode">
+            <view type="create" name="ForumCreate" class="org.torweg.pulse.site.View">
+                <command action="contentRegistryCreate"/>
+            </view>
+            <view type="save" name="ForumSaveFolder" class="org.torweg.pulse.site.View">
+                <command action="createContentFolderNode" bundle="Core"/>
+            </view>
+            <view type="delete" name="ForumDeleteFolder" class="org.torweg.pulse.site.View">
+                <command action="deleteRegistryLocaleNode" bundle="Core"/>
+            </view>
+            <view type="edit" name="ForumEditFolder" class="org.torweg.pulse.site.View">
+                <command action="renameRegistryLocaleNode" bundle="Core"/>
+            </view>
+            <view type="move" name="ForumMove" class="org.torweg.pulse.site.View">
+                <command action="moveRegistryLocaleNode" bundle="Core"/>
+            </view>
+            <view type="expandEdit" name="ForumExpandEdit" class="org.torweg.pulse.site.View">
+                <command action="browseContentRegistryEdit"/>
+            </view>
+        </mapping>
+        
+       	<mapping class="org.torweg.pulse.site.content.ContentNode">
+            <view type="move" name="ForumMove" class="org.torweg.pulse.site.View">
+                <command action="moveRegistryLocaleNode" bundle="Core"/>
+            </view>
+            <view type="expandEdit" name="ForumExpandEdit" class="org.torweg.pulse.site.View">
+                <command action="browseContentRegistryEdit"/>
+            </view>
+        </mapping>
+        
+        <mapping class="org.torweg.pulse.site.content.RegistryLocaleNode">
+            <view type="create" name="ForumCreate" class="org.torweg.pulse.site.View">
+                <command action="contentRegistryCreate"/>
+            </view>
+            <view type="expandEdit" name="ForumExpandEdit" class="org.torweg.pulse.site.View">
+                <command action="browseContentRegistryEdit"/>
+            </view>
+        </mapping>
 
-	<!-- the Joblets of this Bundle -->
-	<joblets/>
+        <mapping class="org.torweg.pulse.site.content.RegistryBundleNode">
+            <view type="expandEdit" name="ForumExpandEdit" class="org.torweg.pulse.site.View">
+                <command action="browseContentRegistryEdit"/>
+            </view>
+        </mapping>
+	</content-mappings>
+
+
 </bundle>
 
