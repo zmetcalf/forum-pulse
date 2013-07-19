@@ -116,7 +116,8 @@ public class ForumContentRegistryEditor extends AbstractContentRegistryEditor {
 										.toCommandURL(request));
 
 				// content-group
-				result
+				/*TODO Add this back in when putting groups back in
+				 * result
 						.setCreateURL(ContentGroup.class.getCanonicalName(),
 								bundle
 										.getViewTypes(
@@ -126,7 +127,7 @@ public class ForumContentRegistryEditor extends AbstractContentRegistryEditor {
 												request.getCommand()
 														.createCopy(false))
 										.addHttpParameter("id", id.toString())
-										.toCommandURL(request));
+										.toCommandURL(request));*/
 
 			} else {
 				// this is a RegistryLocaleNode

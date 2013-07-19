@@ -4,9 +4,6 @@
     <!-- includes -->
     <xsl:import href="i18n/admin-viewport.Forum.babelfish.xsl"/>
 
-    <!-- import Store-Object js-templates -->
-    <xsl:import href="ajax.Forum.jsObject.xsl"/>
-
     <!-- imports -->
     <xsl:import href="../../../xsl/globals.xsl"/>
     <xsl:import href="../../core/xsl/ajax.AbstractBasicContent.Editor.xsl"/>
