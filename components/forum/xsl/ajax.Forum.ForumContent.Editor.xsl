@@ -3,6 +3,9 @@
 
     <!-- includes -->
     <xsl:import href="i18n/admin-viewport.Forum.babelfish.xsl"/>
+    
+    <!-- import Core-Object js-templates -->
+    <xsl:import href="../../core/xsl/ajax.Core.jsObject.xsl"/>
 
     <!-- imports -->
     <xsl:import href="../../../xsl/globals.xsl"/>
