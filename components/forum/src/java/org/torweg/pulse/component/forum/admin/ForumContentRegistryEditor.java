@@ -51,7 +51,7 @@ import org.torweg.pulse.util.adminui.RightsCheckUtils;
  * functions for the Forum-branch of {@code ContentRegistry}.
  * </p>
  * 
- * @author Daniel Dietz, Zach Metcalf
+ * @author Daniel Dietz
  * @version $Revision$
  */
 public class ForumContentRegistryEditor extends AbstractContentRegistryEditor {
@@ -116,8 +116,8 @@ public class ForumContentRegistryEditor extends AbstractContentRegistryEditor {
 										.toCommandURL(request));
 
 				// content-group
-				/*TODO Add this back in when putting groups back in
-				 * result
+				
+				result
 						.setCreateURL(ContentGroup.class.getCanonicalName(),
 								bundle
 										.getViewTypes(
@@ -127,7 +127,7 @@ public class ForumContentRegistryEditor extends AbstractContentRegistryEditor {
 												request.getCommand()
 														.createCopy(false))
 										.addHttpParameter("id", id.toString())
-										.toCommandURL(request));*/
+										.toCommandURL(request));
 
 			} else {
 				// this is a RegistryLocaleNode

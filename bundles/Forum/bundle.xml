@@ -7,6 +7,7 @@
 		
 		<!-- admin -->
         <controller class="org.torweg.pulse.site.content.admin.AbstractBasicContentEditor"/>
+        <controller class="org.torweg.pulse.component.core.contentregistry.ContentGroupEditor"/>
         <controller class="org.torweg.pulse.component.forum.admin.ForumContentEditor"/>
         <controller class="org.torweg.pulse.component.forum.admin.ForumContentRegistryEditor"/>	
 	</controllers>
@@ -30,6 +31,24 @@
                 <command action="deleteAbstractContentNode" bundle="Core"/>
             </view>
             <!-- <view class=""><command/></view> -->
+        </mapping>
+        
+        <mapping class="org.torweg.pulse.site.content.ContentGroup">
+            <view type="default" name="CMSDisplay" class="org.torweg.pulse.site.View">
+                <command action="displayCMS"/>
+            </view>
+            <view type="create" name="CMSCreateContentGroup" class="org.torweg.pulse.site.View">
+                <command action="createContentGroup"/>
+            </view>
+            <view type="save" name="CMSSaveContentGroup" class="org.torweg.pulse.site.View">
+                <command action="saveContentGroup"/>
+            </view>
+            <view type="edit" name="CMSContentGroupEditor" class="org.torweg.pulse.site.View">
+                <command action="initContentGroupEditor"/>
+            </view>
+            <view type="delete" name="CMSDeleteContentGroup" class="org.torweg.pulse.site.View">
+                <command action="deleteAbstractContentNode" bundle="Core"/>
+            </view>
         </mapping>
         
         <mapping class="org.torweg.pulse.site.content.ContentFolderNode">

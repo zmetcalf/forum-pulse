@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration bean="org.torweg.pulse.component.core.contentregistry.ContentGroupEditorConfig">
+    <ajax xsl="WEB-INF/components/core/xsl/ajax.Core.ContentGroup.Editor.xsl"/>
+    <ajaxSummary xsl="WEB-INF/components/core/xsl/ajax.AbstractBasicContent.Summary.xsl"/>
+    <ajaxDescription xsl="WEB-INF/components/core/xsl/ajax.Core.ContentGroup.Description.xsl"/>
+    <!-- AbstractBasicContentEditor -->
+    <ajaxFCK xsl="WEB-INF/components/core/xsl/ajax.FCKEditor.xsl"/>
+    <ajaxSummary xsl="WEB-INF/components/core/xsl/ajax.AbstractBasicContent.Summary.xsl"/>
+    <ajaxContentLocalizationMap
+        xsl="WEB-INF/components/core/xsl/ajax.AbstractBasicContent.ContentLocalizationMap.xsl"/>
+    <ajaxAttachments xsl="WEB-INF/components/core/xsl/ajax.AbstractBasicContent.Attachments.xsl"/>
+</configuration>
