@@ -1,5 +1,6 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
-    xmlns:ext="http://ext-js.com" xmlns="http://www.w3.org/1999/xhtml">
+<xsl:stylesheet xmlns:fn="http://www.w3.org/2005/xpath-functions"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+    xmlns="http://www.w3.org/1999/xhtml">
 
     <!-- includes -->
     <xsl:import href="i18n/admin-viewport.Forum.babelfish.xsl"/>
@@ -49,14 +50,14 @@
         </div>
     </xsl:template>
     
-    <xsl:template match="Content[@class='org.torweg.pulse.component.forum.model.StoreContent']"
+    <xsl:template match="Content[@class='org.torweg.pulse.component.forum.model.ForumContent']"
         mode="editorBuilder">
         
         <!-- builds AbstractBasicContentEditor-Part -->
         <xsl:apply-templates select="self::node()" mode="AbstractBasicContent.Editor"/>
         
         <!-- builds description-editor --><!-- Put back in with description/post etc -->
-        <!-- <xsl:apply-templates select="self::node()" mode="description.editor"/> -->
+        <xsl:apply-templates select="self::node()" mode="description.editor"/>
 
         <!-- builds ContentLocalizationMap-editor -->
         <xsl:apply-templates select="self::node()" mode="ContentLocalizationMap.Editor"/>
@@ -110,11 +111,11 @@
                     
                     saveContentURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='saveContent']/text()"/>',
                     copyContentURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='copyContent']/text()"/>',
-<!-- Use this for future decription/post etc --> <!--                     
+					<!-- Use this for future decription/post etc -->                      
                     initDescriptionEditorURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='initDescriptionEditor']/text()"/>',
                     saveDescriptionURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='saveDescription']/text()"/>',
                     loadDescriptionURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='loadDescription']/text()"/>',
-                    -->
+                    
                     <!-- content-loc-map-editor -->
                     initContentLocalizationMapURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='initContentLocalizationMap']/text()"/>',
                     contentLocalizationMapAddURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='contentLocalizationMapAdd']/text()"/>',
