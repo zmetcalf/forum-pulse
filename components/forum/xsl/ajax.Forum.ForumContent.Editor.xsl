@@ -56,7 +56,7 @@
         <!-- builds AbstractBasicContentEditor-Part -->
         <xsl:apply-templates select="self::node()" mode="AbstractBasicContent.Editor"/>
         
-        <!-- builds description-editor --><!-- Put back in with description/post etc -->
+        <!-- builds description-editor -->
         <xsl:apply-templates select="self::node()" mode="description.editor"/>
 
         <!-- builds ContentLocalizationMap-editor -->
@@ -79,10 +79,10 @@
     <xsl:template name="forumContent.Editor.inlineJs.LOC">
         <script type="text/javascript">
             
-            <!--// LOCALIZATIONS -->
+            <!--// LOCALIZATIONS 
             Pulse.LOC.ForumContentImageGroupEditor.toMainImage = '<xsl:call-template name="admin-viewport.Forum.babelfish">
                 <xsl:with-param name="id" tunnel="yes">toMainImage</xsl:with-param>
-            </xsl:call-template>';
+            </xsl:call-template>';-->
             
             
         </script>
