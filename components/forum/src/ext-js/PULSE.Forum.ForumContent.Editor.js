@@ -36,6 +36,95 @@ ForumContentEditor = {
 		 */
 		DBG : false/* DBG.ForumContentEditor */,
 		
+		/**
+		 * 
+		 * @return {}
+		 */
+		getEditDescriptionButtonConfig : function() {
+			return {
+				text : VIEWPORT_PROPERTIES.BUTTON_TEXT_EDIT,
+				disabled : true,
+				scope : this,
+				handler : function() {
+
+					var fckWinCfg = {
+						loadURL : this.initDescriptionEditorURL,
+						loadParams : {
+							id : this.getContent().id
+						},
+						saveURL : this.saveDescriptionURL,
+						saveParams : {
+							id : this.getContent().id
+						},
+						scope : this,
+						onSaveSuccess : 'loadDescription'
+					};
+
+					// DBG >>
+					if (this.DBG) {
+						THROW({
+									propsObj : fckWinCfg,
+									props : ['loadURL', 'loadParams', 'saveURL',
+											'saveParams', 'scope', 'onSaveSuccess']
+								}, this, 'editDescription.click');
+					}
+
+					AbstractBasicContentEditor.getFCKEditorWindow(fckWinCfg);
+				},
+				iconCls : 'editIconCls'
+			};
+
+		},
+
+		/**
+		 * 
+		 * @return {}
+		 */
+		getReloadDescriptionButtonConfig : function() {
+			return {
+				text : VIEWPORT_PROPERTIES.BUTTON_TEXT_RELOAD,
+				disabled : true,
+				scope : this,
+				handler : function() {
+					this.loadDescription();
+				},
+				iconCls : 'reloadIconCls'
+			};
+		},
+		
+		/**
+		 * loads the description-panel
+		 */
+		loadDescription : function() {
+
+			// DBG >>
+			if (this.DBG) {
+				THROW({
+							props : ['loadDescriptionURL', 'content.id']
+						}, this, 'loadDescripton');
+			}
+
+			try {
+
+				var loadCfg = {
+					url : this.loadDescriptionURL,
+					method : 'POST',
+					callback : LPCB_DISABLE,
+					params : {
+						id : this.getContent().id
+					},
+					text : 'loading...',
+					discardUrl : true,
+					nocache : true,
+					timeout : 30
+				};
+				this.descriptionPanel.load(loadCfg);
+
+			} catch (e) {
+				FATAL(e, this, 'loadDescripton');
+			}
+		},
+		
 		initDescriptionPanel : function() {
 
 			// DBG >>

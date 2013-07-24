@@ -27,14 +27,14 @@
             <!-- inline-js localizations -->
             <xsl:call-template name="forumContent.Editor.inlineJs.LOC"/>
     
-            <!-- builds html-part -->
+            <!-- builds editor html-components -->
             <xsl:apply-templates
-                select="//result[@class='org.torweg.pulse.component.forum.admin.ForumContentEditorResult']/Content"
+                select="//result[@class='org.torweg.pulse.site.content.admin.AbstractBasicContentEditorResult']/Content"
                 mode="editorBuilder"/>
 
             <!-- inline-js -->
             <xsl:apply-templates
-                select="//result[@class='org.torweg.pulse.component.forum.admin.ForumContentEditorResult']/Content"
+                select="//result[@class='org.torweg.pulse.site.content.admin.AbstractBasicContentEditorResult']/Content"
                 mode="inlineJs"/>
 
             <!-- debug -->
@@ -111,7 +111,7 @@
                     
                     saveContentURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='saveContent']/text()"/>',
                     copyContentURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='copyContent']/text()"/>',
-					<!-- Use this for future decription/post etc -->                      
+                    
                     initDescriptionEditorURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='initDescriptionEditor']/text()"/>',
                     saveDescriptionURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='saveDescription']/text()"/>',
                     loadDescriptionURL: '<xsl:value-of select="$commandGeneratorResult/command[@name='loadDescription']/text()"/>',

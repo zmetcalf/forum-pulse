@@ -37,6 +37,8 @@ import org.torweg.pulse.service.request.ServiceRequest;
 import org.torweg.pulse.site.content.ContentFolderNode;
 import org.torweg.pulse.site.content.ContentNode;
 import org.torweg.pulse.site.content.admin.AbstractBasicContentEditor;
+import org.torweg.pulse.site.content.admin.AbstractBasicContentEditorResult;
+import org.torweg.pulse.util.adminui.FCKEditorResult;
 import org.torweg.pulse.util.adminui.JSONCommunicationUtils;
 import org.torweg.pulse.util.adminui.RightsCheckUtils;
 import org.torweg.pulse.util.entity.Node;
@@ -71,7 +73,7 @@ public class ForumContentEditor extends AbstractBasicContentEditor {
 	@RequireToken
 	@Action(value = "initEditor", generate = true)
 	@Permission("viewForumContent")
-	public final ForumContentEditorResult initEditor(final Bundle bundle,
+	public final AbstractBasicContentEditorResult initEditor(final Bundle bundle,
 			final ServiceRequest request) {
 
 		// get contentId from request
@@ -81,27 +83,30 @@ public class ForumContentEditor extends AbstractBasicContentEditor {
 		// setup
 		Session s = Lifecycle.getHibernateDataSource().createNewSession();
 		Transaction tx = s.beginTransaction();
-		ForumContent content = null;
+		AbstractBasicContentEditorResult result = new AbstractBasicContentEditorResult();
+		ForumContent forumContent = null;
 
 		try {
-		
+
 			// load the requested content
-			content = (ForumContent) s.get(ForumContent.class, id);
-			
-			tx.commit();
+			forumContent = (ForumContent) s.get(ForumContent.class, id);
+
+			/* init lazy fields */
+			forumContent.initializeLazyFields();
+
+			// set content for the result
+			result.setContent(forumContent);
+
+			tx.rollback();
 		} catch (Exception e) {
 			tx.rollback();
-			throw new PulseException("ForumContentEditor.doInitEditor.failed: "
+			throw new PulseException("ForumContentEditor.initEditor.failed: "
 					+ e.getLocalizedMessage(), e);
 		} finally {
 			s.close();
 		}
 
 		// output
-		ForumContentEditorResult result = new ForumContentEditorResult();
-		if (content != null) {
-			result.setContent(content);
-		}
 		XSLTOutputEvent event = new XSLTOutputEvent(getConfig().getAjaxXSL());
 		event.setStopEvent(true);
 		request.getEventManager().addEvent(event);
@@ -288,6 +293,59 @@ public class ForumContentEditor extends AbstractBasicContentEditor {
 		} else {
 			JSONCommunicationUtils.jsonErrorMessage(request, error);
 		}
+	}
+	
+	/**
+	 * starts the FCKEditor for the description of the content determined by the
+	 * request.
+	 * 
+	 * @param bundle
+	 *            the current {@code Bundle}
+	 * @param request
+	 *            the current {@code ServiceRequest}
+	 * 
+	 * @return the initialized description-editor
+	 */
+	@RequireToken
+	@Action(value = "initDescriptionEditor", generate = true)
+	@Permission("editForumContent")
+	public final FCKEditorResult initDescriptionEditor(final Bundle bundle,
+			final ServiceRequest request) {
+
+		// get contentId from request
+		Long id = Long.parseLong(request.getCommand().getParameter("id")
+				.getFirstValue());
+
+		// setup
+		Session s = Lifecycle.getHibernateDataSource().createNewSession();
+		Transaction tx = s.beginTransaction();
+		ForumContent forumContent = null;
+
+		try {
+
+			// load the requested content
+			forumContent = (ForumContent) s.get(ForumContent.class, id);
+
+			tx.rollback();
+		} catch (Exception e) {
+			tx.rollback();
+			throw new PulseException(
+					"ForumContentEditor.initDescriptionEditor.failed: "
+							+ e.getLocalizedMessage(), e);
+		} finally {
+			s.close();
+		}
+
+		// output
+		FCKEditorResult result = new FCKEditorResult();
+		if (forumContent != null) {
+			result.setContentLocale(forumContent.getLocale());
+			result.setFCKContent(forumContent.getDescription());
+		}
+		XSLTOutputEvent event = new XSLTOutputEvent(getConfig().getFCKAjaxXSL());
+		event.setStopEvent(true);
+		request.getEventManager().addEvent(event);
+		return result;
 	}
 	
 }
