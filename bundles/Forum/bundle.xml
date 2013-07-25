@@ -34,19 +34,19 @@
         </mapping>
         
         <mapping class="org.torweg.pulse.site.content.ContentGroup">
-            <view type="default" name="CMSDisplay" class="org.torweg.pulse.site.View">
-                <command action="displayCMS"/>
+            <view type="default" name="ForumDisplay" class="org.torweg.pulse.site.View">
+                <command action="displayForum"/>
             </view>
-            <view type="create" name="CMSCreateContentGroup" class="org.torweg.pulse.site.View">
+            <view type="create" name="ForumCreateContentGroup" class="org.torweg.pulse.site.View">
                 <command action="createContentGroup"/>
             </view>
-            <view type="save" name="CMSSaveContentGroup" class="org.torweg.pulse.site.View">
+            <view type="save" name="ForumSaveContentGroup" class="org.torweg.pulse.site.View">
                 <command action="saveContentGroup"/>
             </view>
-            <view type="edit" name="CMSContentGroupEditor" class="org.torweg.pulse.site.View">
+            <view type="edit" name="ForumContentGroupEditor" class="org.torweg.pulse.site.View">
                 <command action="initContentGroupEditor"/>
             </view>
-            <view type="delete" name="CMSDeleteContentGroup" class="org.torweg.pulse.site.View">
+            <view type="delete" name="ForumDeleteContentGroup" class="org.torweg.pulse.site.View">
                 <command action="deleteAbstractContentNode" bundle="Core"/>
             </view>
         </mapping>

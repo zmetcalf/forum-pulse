@@ -61,7 +61,7 @@ public class ForumContentEditorConfig extends AbstractBasicContentEditorConfig {
 	 * 
 	 * @return the XSLHandle for AJAX responses
 	 */
-	public final XSLHandle getPagesAjaxXSL() {
+	public final XSLHandle getAjaxDescriptionXSL() {
 		return PoorMansCache.getXSLHandle(this.ajaxDescriptionXSLFile);
 	}
 
@@ -74,17 +74,14 @@ public class ForumContentEditorConfig extends AbstractBasicContentEditorConfig {
 	 */
 	@Override
 	public void init(final Element conf) {
-
 		super.init(conf);
-
 		// if (conf.getChild("ajax") != null) {
 		// this.ajaxXSLFile = new File(conf.getChild("ajax")
 		// .getAttributeValue("xsl"));
 		// }
-		if (conf.getChild("ajaxPages") != null) {
-			this.ajaxDescriptionXSLFile = new File(conf.getChild("ajaxPages")
-					.getAttributeValue("xsl"));
+		if (conf.getChild("ajaxDescription") != null) {
+			this.ajaxDescriptionXSLFile = new File(conf.getChild(
+					"ajaxDescription").getAttributeValue("xsl"));
 		}
 	}
-
 }

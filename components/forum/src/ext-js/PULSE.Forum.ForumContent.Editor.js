@@ -34,7 +34,7 @@ ForumContentEditor = {
 		/**
 		 * uncomment below for global DBG
 		 */
-		DBG : false/* DBG.ForumContentEditor */,
+		DBG : true/* DBG.ForumContentEditor */,
 		
 		/**
 		 * 
@@ -139,7 +139,7 @@ ForumContentEditor = {
 
 				var buttons = [];
 
-				// enable edit-desceiption-button if URL
+				// enable edit-description-button if URL
 				var editDescriptionButtonConfig = this
 						.getEditDescriptionButtonConfig();
 				if (typeof(this.initDescriptionEditorURL) == 'string'

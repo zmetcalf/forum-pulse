@@ -23,6 +23,7 @@ import net.sf.json.JSONObject;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.jdom.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.torweg.pulse.annotations.Action;
@@ -47,7 +48,7 @@ import org.torweg.pulse.util.entity.Node;
  * the editor for the ForumContent as used by the ext-admin.
  * 
  * @see ForumContent
- * @author Daniel Dietz, Zach Metcalf
+ * @author Daniel Dietz
  * @version $Revision$
  */
 
@@ -343,6 +344,124 @@ public class ForumContentEditor extends AbstractBasicContentEditor {
 			result.setFCKContent(forumContent.getDescription());
 		}
 		XSLTOutputEvent event = new XSLTOutputEvent(getConfig().getFCKAjaxXSL());
+		event.setStopEvent(true);
+		request.getEventManager().addEvent(event);
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param bundle
+	 *            the current {@code Bundle}
+	 * @param request
+	 *            the current {@code ServiceRequest}
+	 */
+	@RequireToken
+	@Action(value = "saveDescription", generate = true)
+	@Permission("editForumContent")
+	public final void saveDescription(final Bundle bundle,
+			final ServiceRequest request) {
+
+		// get contentId from request
+		Long id = Long.parseLong(request.getCommand().getParameter("id")
+				.getFirstValue());
+		String value = request.getCommand().getParameter("value")
+				.getFirstValue();
+
+		// setup
+		Session s = Lifecycle.getHibernateDataSource().createNewSession();
+		Transaction tx = s.beginTransaction();
+		ForumContent forumContent = null;
+		// error : userHasNoEditRightsForLocale (if occurs)
+		JSONObject error = null;
+
+		try {
+
+			// load the requested content
+			forumContent = (ForumContent) s.get(ForumContent.class, id);
+
+			// check user
+			error = RightsCheckUtils.checkUserAgainstLocale(error, bundle,
+					request, forumContent.getLocale());
+
+			if (error == null) {
+
+				Document desc = buildDocument(value);
+
+				// set the new description
+				forumContent.setDescription(desc.getRootElement());
+
+				// update associated files
+				forumContent.updateAssociatedVirtualFiles();
+
+				// persist
+				s.saveOrUpdate(forumContent);
+			}
+
+			tx.commit();
+
+		} catch (Exception e) {
+			tx.rollback();
+			throw new PulseException(
+					"ForumContentEditor.saveDescription.failed"
+							+ e.getLocalizedMessage(), e);
+		} finally {
+			s.close();
+		}
+
+		// output
+		if (error == null) {
+			JSONCommunicationUtils.jsonSuccessMessage(request);
+		} else {
+			JSONCommunicationUtils.jsonErrorMessage(request, error);
+		}
+	}
+
+	/**
+	 * @param bundle
+	 *            the current {@code Bundle}
+	 * @param request
+	 *            the current {@code ServiceRequest}
+	 * @return a result representing the description of the current content
+	 */
+	@RequireToken
+	@Action(value = "loadDescription", generate = true)
+	@Permission("editForumContent")
+	public final AbstractBasicContentEditorResult loadDescription(
+			final Bundle bundle, final ServiceRequest request) {
+
+		// get contentId from request
+		Long id = Long.parseLong(request.getCommand().getParameter("id")
+				.getFirstValue());
+
+		// setup
+		Session s = Lifecycle.getHibernateDataSource().createNewSession();
+		Transaction tx = s.beginTransaction();
+		ForumContent forumContent = null;
+
+		try {
+
+			// load the requested content
+			forumContent = (ForumContent) s.get(ForumContent.class, id);
+
+			tx.rollback();
+
+		} catch (Exception e) {
+			tx.rollback();
+			throw new PulseException(
+					"ForumContentEditor.loadDescription.failed"
+							+ e.getLocalizedMessage(), e);
+		} finally {
+			s.close();
+		}
+
+		// output
+		AbstractBasicContentEditorResult result = new AbstractBasicContentEditorResult();
+		if (forumContent != null) {
+			result.setContent(forumContent);
+		}
+		XSLTOutputEvent event = new XSLTOutputEvent(
+				((ForumContentEditorConfig) getConfig()).getAjaxDescriptionXSL());
 		event.setStopEvent(true);
 		request.getEventManager().addEvent(event);
 		return result;
