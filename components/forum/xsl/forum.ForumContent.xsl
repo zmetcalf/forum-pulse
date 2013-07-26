@@ -24,6 +24,10 @@
             <xsl:value-of select="name/text()"/>
         </h1>
             
+        <!-- description -->
+        <xsl:if test="fn:matches(fn:string-join(description/body/descendant::*/text(),''), '\w+')">
+            <xsl:apply-templates select="description/body/*" mode="xhtml"/>
+        </xsl:if>
         
    	</xsl:template>
     

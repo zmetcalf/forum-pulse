@@ -34,7 +34,7 @@ ForumContentEditor = {
 		/**
 		 * uncomment below for global DBG
 		 */
-		DBG : true/* DBG.ForumContentEditor */,
+		DBG : false/* DBG.ForumContentEditor */,
 		
 		/**
 		 * 
@@ -167,6 +167,7 @@ ForumContentEditor = {
 					title : VIEWPORT_PROPERTIES.DESCRIPTION + ':',
 					collapsible : true,
 					collapsed : true,
+					titleCollapse : true,
 					renderTo : this.getContent().clazz + '.' + this.getContent().id
 							+ '.description',
 					html : '...',
@@ -240,6 +241,7 @@ ForumContentEditor = {
 			try {
 
 				// call inits
+				this.initDescriptionPanel(); // builds descritpion-editor
 				this.initFieldMonitoring();
 				if (false !== boolInitTab) {
 					this.initTab(); // adds buttons to tab-tool-bar
