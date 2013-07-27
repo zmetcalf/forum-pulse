@@ -39,15 +39,13 @@ import org.torweg.pulse.accesscontrol.Role;
 import org.torweg.pulse.accesscontrol.User;
 import org.torweg.pulse.bundle.Bundle;
 import org.torweg.pulse.bundle.ExtendedJDOMable;
-import org.torweg.pulse.site.content.AbstractBasicContent;
 import org.torweg.pulse.site.content.AbstractSummaryDescriptionContent;
 import org.torweg.pulse.site.content.Content;
-import org.torweg.pulse.site.content.Variant;
 import org.torweg.pulse.vfs.VirtualFile;
 import org.torweg.pulse.vfs.VirtualFileSystem;
 
 /**
- * @author Thomas Weber, Daniel Dietz, Zach Metcalf
+ * @author Thomas Weber, Daniel Dietz
  * @version $Revision$
  */
 @Entity
@@ -57,6 +55,11 @@ import org.torweg.pulse.vfs.VirtualFileSystem;
 public class ForumContent extends AbstractSummaryDescriptionContent implements
 		ExtendedJDOMable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3111078051092502502L;
+
 	/**
 	 * the logger for {@code ForumContent}.
 	 */

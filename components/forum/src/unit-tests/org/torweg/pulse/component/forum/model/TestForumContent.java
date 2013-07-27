@@ -20,6 +20,8 @@ package org.torweg.pulse.component.forum.model;
 import java.io.File;
 import java.util.Locale;
 
+import junit.framework.TestCase;
+
 import org.torweg.pulse.TestingEnvironment;
 import org.torweg.pulse.bundle.Bundle;
 import org.torweg.pulse.component.forum.model.ForumContent;
@@ -67,7 +69,7 @@ public class TestForumContent extends TestCase {
 	}
 	
 	public void testCreateContent() throws Exception {
-		ForumContent content = new ForumConent(new Locale("xx_YY"), new Bundle(
+		ForumContent content = new ForumContent(new Locale("xx_YY"), new Bundle(
 				new File("test")));
 		
 	}
