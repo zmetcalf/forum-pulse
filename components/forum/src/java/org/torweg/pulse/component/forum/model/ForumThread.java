@@ -17,6 +17,9 @@
  */
 package org.torweg.pulse.component.forum.model;
 
+import java.io.IOException;
+import java.io.StringReader;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,12 +32,21 @@ import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.hibernate.LazyInitializationException;
 import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.torweg.pulse.service.PulseException;
 import org.torweg.pulse.util.entity.AbstractBasicEntity;
+import org.torweg.pulse.util.time.CalendarJAXBOutputWrapper;
+import org.torweg.pulse.util.xml.XMLConverter;
+import org.torweg.pulse.util.xml.bind.ElementXmlAdapter;
 
 /**
  * @author Thomas Weber, Daniel Dietz, Zach Metcalf
@@ -82,14 +94,14 @@ public class ForumThread extends AbstractBasicEntity<ForumThread> {
 	 * the thread mark-up as a string.
 	 */
 	@Lob
-	@Column(columnDefinition="TEXT", nullable=false)
+	@Column(length = 65535, nullable=false)
 	private String post;
 	
 	/**
-	 * the thread as a JDOM element.
+	 * the post as a JDOM element.
 	 */
 	@Transient
-	private Element threadElement;
+	private Element postElement;
 	
 	/**
 	 * the created timestamp.
@@ -124,7 +136,107 @@ public class ForumThread extends AbstractBasicEntity<ForumThread> {
 		this.author = athr;
 	}
 
+	/**
+	 * @return the classification
+	 */
+	public final Classification getClassification() {
+		return this.classification;
+	}
 
+	/**
+	 * @param clssfctn
+	 *            the classification to set
+	 */
+	public final void setClassification(final Classification clssfctn) {
+		this.classification = clssfctn;
+	}
+
+	/**
+	 * Returns the post of the {@code ForumPost}.
+	 * 
+	 * @return the post of the {@code ForumPost}
+	 */
+	public final String getPost() {
+		return this.post;
+	}
+
+	/**
+	 * Sets the post of the {@code ForumPost} from a JDOM {@code Element}.
+	 * 
+	 * @param cmmnt
+	 *            the JDOM {@code Element} representing the post to be set.
+	 */
+	public final void setPost(final Element cmmnt) {
+		this.post = XMLConverter.getRawString(cmmnt, true);
+		this.postElement = cmmnt;
+	}
+
+	/**
+	 * Returns the post of the {@code ForumPost} as a JDOM {@code Element}.
+	 * 
+	 * @return the post of the {@code ForumPost} as a JDOM {@code Element}.
+	 */
+	public final Element getPostElement() {
+		if (getPost() == null) {
+			return null;
+		}
+		if (this.postElement == null) {
+			try {
+				this.postElement = new SAXBuilder().build(
+						new StringReader(getPost())).getRootElement();
+			} catch (JDOMException e) {
+				throw new PulseException("Error parsing XML for description: "
+						+ e.getLocalizedMessage(), e);
+			} catch (IOException e) {
+				throw new PulseException("Error reading XML for description: "
+						+ e.getLocalizedMessage(), e);
+			}
+		}
+		return (Element) this.postElement.clone();
+	}
+
+	/**
+	 * For JAXB only.
+	 * 
+	 * @return this.getDescriptionElement()
+	 */
+	@XmlElement(name = "description-element")
+	@XmlJavaTypeAdapter(value = ElementXmlAdapter.class)
+	@SuppressWarnings("unused")
+	@Deprecated
+	private Element getPostElementJAXB() {
+		try {
+			return getPostElement();
+		} catch (LazyInitializationException e) {
+			LOGGER.trace("ignored: {}", e.getLocalizedMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * @return the author
+	 */
+	public final Author getAuthor() {
+		return this.author;
+	}
+
+	/**
+	 * @return the createdOn
+	 */
+	public final long getCreatedOn() {
+		return this.createdOn;
+	}
+
+	/**
+	 * for JAXB.
+	 * 
+	 * @return the created on date
+	 */
+	@XmlElement(name = "created-on")
+	@SuppressWarnings("unused")
+	private CalendarJAXBOutputWrapper getCreatedOnJAXB() {
+		return new CalendarJAXBOutputWrapper(this.createdOn);
+	}
 	
 	/**
 	 * thread classification.
