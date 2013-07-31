@@ -140,6 +140,13 @@ public class ForumPost extends AbstractBasicEntity<ForumPost> {
 	public final Classification getClassification() {
 		return this.classification;
 	}
+	
+	/**
+	 * @return the forumThread
+	 */
+	public final ForumThread getForumThread() {
+		return this.forumThread;
+	}
 
 	/**
 	 * @param clssfctn

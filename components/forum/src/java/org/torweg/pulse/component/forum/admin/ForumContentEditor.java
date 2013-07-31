@@ -24,13 +24,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.jdom.Document;
+import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.torweg.pulse.annotations.Action;
 import org.torweg.pulse.annotations.Permission;
 import org.torweg.pulse.annotations.RequireToken;
 import org.torweg.pulse.bundle.Bundle;
+import org.torweg.pulse.component.forum.model.Author;
 import org.torweg.pulse.component.forum.model.ForumContent;
+import org.torweg.pulse.component.forum.model.ForumThread;
 import org.torweg.pulse.invocation.lifecycle.Lifecycle;
 import org.torweg.pulse.service.PulseException;
 import org.torweg.pulse.service.event.XSLTOutputEvent;
@@ -48,7 +51,7 @@ import org.torweg.pulse.util.entity.Node;
  * the editor for the ForumContent as used by the ext-admin.
  * 
  * @see ForumContent
- * @author Daniel Dietz
+ * @author Daniel Dietz, Zach Metcalf
  * @version $Revision$
  */
 
@@ -465,6 +468,88 @@ public class ForumContentEditor extends AbstractBasicContentEditor {
 		event.setStopEvent(true);
 		request.getEventManager().addEvent(event);
 		return result;
+	}
+	
+	/**
+	 * creates and saves a new {@code ForumThread} under a {@code ForumContent}.
+	 * 
+	 * @param bundle
+	 *            the current {@code Bundle}
+	 * @param request
+	 *            the current {@code ServiceRequest}
+	 */
+	@RequireToken
+	@Action(value = "createForumThread", generate = true)
+	@Permission("createForumThreadOrPost")
+	public void createThread(final Bundle bundle, final ServiceRequest request) {
+
+		// retrieve parent-id/name from request
+		Long id = Long.parseLong(request.getCommand().getParameter("id")
+				.getFirstValue());
+		Author athr = new Author("Test Person", "test@example.com");
+		String post = "";
+		
+		// setup
+		Session s = Lifecycle.getHibernateDataSource().createNewSession();
+		Transaction tx = s.beginTransaction();
+		// error : userHasNoEditRightsForLocale (if occurs)
+		JSONObject error = null;
+		ForumThread newThread = null;
+
+		try {
+
+			// load the parent-content-node that has requested the create
+			ForumContent content = (ForumContent) s.get(ForumContent.class, id);
+
+			// user check
+			error = RightsCheckUtils.checkUserAgainstLocale(bundle, request,
+					content.getLocale());
+
+			if (error == null) {
+
+				// create new thread TODO: get correct constructor
+				newThread = new ForumThread(post, content, athr);
+
+				// set empty post
+				newThread.setPost(new Element("body"));
+
+				// add variant to content
+				/* TODO May need to bring this back to associate in database
+				@SuppressWarnings("unchecked")
+				Set<ForumThread> vs = ((Set<ForumThread>) content
+						.getVariants());
+				if (vs.add(newForum)) {
+					content.setVariants(vs);
+				}*/
+
+				// persist
+				s.saveOrUpdate(content);
+
+				tx.commit();
+
+				// TODO : check if this necessary
+				AbstractBasicContentEditor.initHibernateSearchFix(s, content);
+			}
+
+		} catch (Exception e) {
+			tx.rollback();
+			throw new PulseException(
+					"ForumContentEditor.createForumThread.failed: "
+							+ e.getLocalizedMessage(), e);
+		} finally {
+			s.close();
+		}
+
+		// output
+		if (error == null && newThread != null) {
+			JSONObject newThreadJSON = new JSONObject();
+			newThreadJSON.put("id", newThread.getId().toString());
+			newThreadJSON.put("clazz", newThread.getClass()
+					.getCanonicalName());
+			JSONCommunicationUtils.jsonSuccessMessage(request, newThreadJSON);
+		} else {
+			JSONCommunicationUtils.jsonErrorMessage(request, error);
+		}
 	}
 	
 }

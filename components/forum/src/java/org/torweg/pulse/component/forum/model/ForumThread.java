@@ -59,8 +59,6 @@ import org.torweg.pulse.util.xml.bind.ElementXmlAdapter;
 @XmlAccessorType(XmlAccessType.NONE)
 public class ForumThread extends AbstractBasicEntity<ForumThread> {
 
-
-
 	/**
 	 * 
 	 */
@@ -149,6 +147,13 @@ public class ForumThread extends AbstractBasicEntity<ForumThread> {
 	 */
 	public final void setClassification(final Classification clssfctn) {
 		this.classification = clssfctn;
+	}
+	
+	/**
+	 * @return the forumContent
+	 */
+	public final ForumContent getForumContent() {
+		return this.forumContent;
 	}
 
 	/**
