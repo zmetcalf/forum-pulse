@@ -17,6 +17,11 @@
  */
 package org.torweg.pulse.component.forum.model;
 
+import org.junit.Test;
+import org.torweg.pulse.TestingEnvironment;
+import org.torweg.pulse.invocation.lifecycle.Lifecycle;
+import org.torweg.pulse.util.HibernateDataSource;
+
 import junit.framework.TestCase;
 
 /**
@@ -25,5 +30,39 @@ import junit.framework.TestCase;
  * 
  */
 public class TestForumThread extends TestCase {
+	
+	/**
+	 * The HibernateDataSource.
+	 */
+	private HibernateDataSource dataSource = null;
+	
+	/**
+	 * set up the test.
+	 * 
+	 * @throws Exception
+	 *             on errors
+	 */
+	@Override
+	protected final void setUp() throws Exception {
+		super.setUp();
+		new TestingEnvironment();
+		this.dataSource = Lifecycle.getHibernateDataSource();
+	}
+	
+	/**
+	 * tear down the test.
+	 * 
+	 * @throws Exception
+	 *             on errors
+	 */
+	@Override
+	protected final void tearDown() throws Exception {
+		super.tearDown();
+	}
+	
+	@Test
+	public void testCreateForumThread() {
+		org.junit.Assert.assertFalse("failure - should be false", false);
+	}
 	
 }
