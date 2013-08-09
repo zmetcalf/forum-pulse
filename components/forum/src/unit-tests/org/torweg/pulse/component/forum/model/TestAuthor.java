@@ -24,11 +24,14 @@ import junit.framework.TestCase;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.jdom.Element;
 import org.junit.Test;
 import org.torweg.pulse.TestingEnvironment;
+import org.torweg.pulse.TestingServiceRequest;
 import org.torweg.pulse.bundle.Bundle;
+import org.torweg.pulse.component.core.accesscontrol.SignUpController;
 import org.torweg.pulse.invocation.lifecycle.Lifecycle;
+import org.torweg.pulse.service.request.Command;
+import org.torweg.pulse.service.request.ServiceRequest;
 import org.torweg.pulse.util.HibernateDataSource;
 
 /**
@@ -36,7 +39,7 @@ import org.torweg.pulse.util.HibernateDataSource;
  * @version $Revision$
  * 
  */
-public class TestForumThread extends TestCase {
+public class TestAuthor extends TestCase {
 	
 	/**
 	 * The HibernateDataSource.
@@ -54,6 +57,11 @@ public class TestForumThread extends TestCase {
 		super.setUp();
 		new TestingEnvironment();
 		this.dataSource = Lifecycle.getHibernateDataSource();
+		Session sess = dataSource.createNewSession();
+		Transaction trans = sess.beginTransaction();
+		Bundle bundle = new Bundle(new File("test"));
+		
+		// Add user in setup
 	}
 	
 	/**
@@ -68,25 +76,7 @@ public class TestForumThread extends TestCase {
 	}
 	
 	@Test
-	public void testCreateForumThread() {
-		Session sess = dataSource.createNewSession();
-		Transaction trans = sess.beginTransaction();
-		Locale locale = new Locale("en", "EN");
-		Bundle bundle = new Bundle(new File("test"));
-		ForumContent content = new ForumContent(locale, bundle);
-		content.setSummary(new Element("summary")
-			.setText("This is the summary."));
-		content.setDescription(new Element("description")
-			.setText("This is the description."));
-		Author athr = new Author("Test Author", "test@case.com");
-		ForumThread frmThrd = new ForumThread(content, athr);
-		frmThrd.setTitle("Title of Post");
-		frmThrd.setPost(new Element("post")
-			.setText("This is a post for testing purposes."));
-		
-		org.junit.Assert.assertNotNull(frmThrd.getPost());
-		
-		
+	public void testCreateAuthor() {
+
 	}
-	
 }

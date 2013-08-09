@@ -89,11 +89,18 @@ public class ForumThread extends AbstractBasicEntity<ForumThread> {
 	private Author author;
 	
 	/**
-	 * the thread mark-up as a string.
+	 * the thread post mark-up as a string.
 	 */
 	@Lob
 	@Column(length = 65535, nullable=false)
 	private String post;
+	
+	/**
+	 * the thread title mark-up as a string.
+	 */
+	@Lob
+	@Column(length = 140, nullable=false)
+	private String title;
 	
 	/**
 	 * the post as a JDOM element.
@@ -126,12 +133,11 @@ public class ForumThread extends AbstractBasicEntity<ForumThread> {
 	 * @param athr
 	 *            the author
 	 */
-	public ForumThread(final String post, final ForumContent cnt,
-			final Author athr) {
+	public ForumThread(final ForumContent cnt, final Author athr) {
 		super();
-		this.post = post;
 		this.forumContent = cnt;
 		this.author = athr;
+		post = "";
 	}
 
 	/**
@@ -156,6 +162,25 @@ public class ForumThread extends AbstractBasicEntity<ForumThread> {
 		return this.forumContent;
 	}
 
+	/**
+	 * returns the title of post
+	 * 
+	 * @return the title
+	 */
+	public final String getTitle() {
+		return this.title;
+	}
+
+	/**
+	 * sets the title of post
+	 * 
+	 * @param t
+	 *            the title to set
+	 */
+	public final void setTitle(final String t) {
+		this.title = t;
+	}
+	
 	/**
 	 * Returns the post of the {@code ForumPost}.
 	 * 
