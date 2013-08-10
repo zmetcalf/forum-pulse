@@ -18,7 +18,9 @@
 package org.torweg.pulse.component.forum.model;
 
 import java.io.File;
-import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
@@ -26,12 +28,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Test;
 import org.torweg.pulse.TestingEnvironment;
+import org.torweg.pulse.TestingHttpServletRequest;
+import org.torweg.pulse.TestingHttpServletResponse;
 import org.torweg.pulse.TestingServiceRequest;
+import org.torweg.pulse.accesscontrol.User;
+import org.torweg.pulse.accesscontrol.authentication.AuthenticationAdapter;
 import org.torweg.pulse.bundle.Bundle;
-import org.torweg.pulse.component.core.accesscontrol.SignUpController;
 import org.torweg.pulse.invocation.lifecycle.Lifecycle;
-import org.torweg.pulse.service.request.Command;
-import org.torweg.pulse.service.request.ServiceRequest;
 import org.torweg.pulse.util.HibernateDataSource;
 
 /**
@@ -60,8 +63,27 @@ public class TestAuthor extends TestCase {
 		Session sess = dataSource.createNewSession();
 		Transaction trans = sess.beginTransaction();
 		Bundle bundle = new Bundle(new File("test"));
+		User usr = new User("TestUser", "test@email.com", "password");
+		usr.setSuperuser(true);
 		
-		// Add user in setup
+		Session s = this.dataSource.createNewSession();
+		Transaction tx = s.beginTransaction();
+
+		s.saveOrUpdate(usr);
+
+		tx.commit();
+		s.close();
+		
+		TestingServiceRequest testRequest = new TestingServiceRequest();
+		
+		//HttpServletRequest request = testRequest.getHttpServletRequest();
+		//HttpServletResponse response = testRequest.getHttpServletResponse();
+		
+		HttpServletRequest request = new TestingHttpServletRequest();
+		HttpServletResponse response = new TestingHttpServletResponse();
+		
+		AuthenticationAdapter.authenticate(request, response, "TestUser", "password");
+		
 	}
 	
 	/**
@@ -73,6 +95,19 @@ public class TestAuthor extends TestCase {
 	@Override
 	protected final void tearDown() throws Exception {
 		super.tearDown();
+		
+		
+		Session s = this.dataSource.createNewSession();
+		Transaction tx = s.beginTransaction();
+		
+		s = this.dataSource.createNewSession();
+		tx = s.beginTransaction();
+		User usr = new User("TestUser", "test@email.com", "password");
+		
+		s.delete(usr);
+
+		tx.commit();
+		s.close();
 	}
 	
 	@Test
