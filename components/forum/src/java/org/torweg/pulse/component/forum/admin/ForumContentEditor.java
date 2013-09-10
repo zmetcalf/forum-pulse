@@ -508,7 +508,7 @@ public class ForumContentEditor extends AbstractBasicContentEditor {
 			if (error == null) {
 
 				// create new thread TODO: get correct constructor
-				newThread = new ForumThread(post, content, athr);
+				newThread = new ForumThread(content, athr);
 
 				// set empty post
 				newThread.setPost(new Element("body"));

@@ -54,6 +54,30 @@ public class TestForumThread extends TestCase {
 		super.setUp();
 		new TestingEnvironment();
 		this.dataSource = Lifecycle.getHibernateDataSource();
+		
+		Session s = dataSource.createNewSession();
+		Transaction tx = s.beginTransaction();
+		Locale locale = new Locale("en", "EN");
+		Bundle bundle = new Bundle(new File("test"));
+		ForumContent content = new ForumContent(locale, bundle);
+		content.setName("forumtest");
+		content.setSummary(new Element("testsummary")
+			.setText("This is the test summary."));
+		content.setDescription(new Element("description")
+			.setText("This is the test description."));
+		Author athr = new Author("Test Author", "test@case.com");
+		ForumThread frmThrd = new ForumThread(content, athr);
+		frmThrd.setTitle("Title of Post");
+		frmThrd.setPost(new Element("post")
+			.setText("This is a post for testing purposes."));
+		
+		s.saveOrUpdate(bundle);
+		s.saveOrUpdate(content);
+		s.saveOrUpdate(athr);
+		s.saveOrUpdate(frmThrd);
+
+		tx.commit();
+		s.close();
 	}
 	
 	/**
@@ -69,23 +93,11 @@ public class TestForumThread extends TestCase {
 	
 	@Test
 	public void testCreateForumThread() {
-		Session sess = dataSource.createNewSession();
-		Transaction trans = sess.beginTransaction();
-		Locale locale = new Locale("en", "EN");
-		Bundle bundle = new Bundle(new File("test"));
-		ForumContent content = new ForumContent(locale, bundle);
-		content.setSummary(new Element("summary")
-			.setText("This is the summary."));
-		content.setDescription(new Element("description")
-			.setText("This is the description."));
-		Author athr = new Author("Test Author", "test@case.com");
-		ForumThread frmThrd = new ForumThread(content, athr);
-		frmThrd.setTitle("Title of Post");
-		frmThrd.setPost(new Element("post")
-			.setText("This is a post for testing purposes."));
-		
-		org.junit.Assert.assertNotNull(frmThrd.getPost());
-		
+		//org.junit.Assert.assertNotNull(frmThrd.getPost());	
+	}
+	
+	@Test
+	public void testAssociatedWithForumContent() {
 		
 	}
 	

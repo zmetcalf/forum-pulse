@@ -65,7 +65,7 @@ public class TestAuthor extends TestCase {
 		Bundle bundle = new Bundle(new File("test"));
 		User usr = new User("TestUser", "test@email.com", "password");
 		usr.setSuperuser(true);
-		
+		/*
 		Session s = this.dataSource.createNewSession();
 		Transaction tx = s.beginTransaction();
 
@@ -73,7 +73,7 @@ public class TestAuthor extends TestCase {
 
 		tx.commit();
 		s.close();
-		
+		*/
 		TestingServiceRequest testRequest = new TestingServiceRequest();
 		
 		//HttpServletRequest request = testRequest.getHttpServletRequest();
