@@ -27,6 +27,7 @@ import org.hibernate.Transaction;
 import org.jdom.Element;
 import org.junit.Test;
 import org.torweg.pulse.TestingEnvironment;
+import org.torweg.pulse.accesscontrol.User;
 import org.torweg.pulse.bundle.Bundle;
 import org.torweg.pulse.invocation.lifecycle.Lifecycle;
 import org.torweg.pulse.util.HibernateDataSource;
@@ -55,12 +56,14 @@ public class TestForumThread extends TestCase {
 		new TestingEnvironment();
 		this.dataSource = Lifecycle.getHibernateDataSource();
 		
-		Session s = dataSource.createNewSession();
+		Session s = this.dataSource.createNewSession();
 		Transaction tx = s.beginTransaction();
 		Locale locale = new Locale("en", "EN");
 		Bundle bundle = new Bundle(new File("test"));
+		User usr = new User("Name", "Email", "Password");
 		ForumContent content = new ForumContent(locale, bundle);
 		content.setName("forumtest");
+		content.setCreator(usr);
 		content.setSummary(new Element("testsummary")
 			.setText("This is the test summary."));
 		content.setDescription(new Element("description")
@@ -76,6 +79,15 @@ public class TestForumThread extends TestCase {
 		s.saveOrUpdate(athr);
 		s.saveOrUpdate(frmThrd);
 
+		tx.commit();
+		s.close();
+		
+		/* delete */
+		s = this.dataSource.createNewSession();
+		tx = s.beginTransaction();
+		s.delete(content);
+		s.delete(bundle);
+		s.delete(usr);
 		tx.commit();
 		s.close();
 	}

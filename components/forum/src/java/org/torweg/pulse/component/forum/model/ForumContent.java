@@ -183,6 +183,7 @@ public class ForumContent extends AbstractSummaryDescriptionContent implements
 	@Override
 	public void onVirtualFileSystemChange(final VirtualFile file) {
 		setSummary(Content.updateHTML(getSummaryElement(), file));
+		setDescription(Content.updateHTML(getDescriptionElement(), file));
 	}
 	
 	/**
@@ -194,8 +195,10 @@ public class ForumContent extends AbstractSummaryDescriptionContent implements
 		HashSet<VirtualFile> files = new HashSet<VirtualFile>();
 		VirtualFileSystem fileSystem = VirtualFileSystem.getInstance();
 		Element element = getSummaryElement();
-		Content.processHTML(element, files, fileSystem);
 		setSummary(element);
+		element = getDescriptionElement();
+		Content.processHTML(element, files, fileSystem);
+		setDescription(element);
 		setAssociatedVirtualFiles(files);
 	}
 }
